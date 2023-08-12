@@ -5,6 +5,7 @@ import com.example.capstoneweek3.Models.ProductModel;
 import com.example.capstoneweek3.Services.CategoryService;
 import com.example.capstoneweek3.Services.ProductService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class ProductController {
 
     private final ProductService productService;
+    @Getter
     private final CategoryService categoryService;
 
     @GetMapping("/get")
@@ -76,5 +78,9 @@ public class ProductController {
         return productService.filter(money);
     }
 
+    @GetMapping("/category/{id}")
+    public ArrayList<ProductModel> filterCategory(@PathVariable Integer id) {
+        return productService.category(id);
+    }
 
 }

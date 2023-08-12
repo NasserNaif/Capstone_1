@@ -88,4 +88,15 @@ public class ProductService {
         }
         return result;
     }
+
+    public ArrayList<ProductModel> category(Integer id) {
+        ArrayList<ProductModel> result = new ArrayList<>();
+        for (ProductModel prod : products
+        ) {
+            if (Objects.equals(prod.getCategoryID(), id)) {
+                result.add(prod);
+            }
+        }
+        return result;
+    }
 }
