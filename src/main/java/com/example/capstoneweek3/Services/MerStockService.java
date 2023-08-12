@@ -39,5 +39,16 @@ public class MerStockService {
         return false;
     }
 
-    
+    public boolean addMoreStocks(Integer productID, Integer merchantID, Integer amount) {
+        for (MerStockModel stock : stocks
+        ) {
+            if (Objects.equals(stock.getProductID(), productID) && Objects.equals(stock.getMerchantID(), merchantID)) {
+                stock.setStock(stock.getStock() + amount);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

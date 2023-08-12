@@ -14,7 +14,7 @@ public class MerchantModel {
     @Positive(message = "ID must be positive")
     private Integer id;
 
-    @NotEmpty(message = "ID must not be null")
+    @NotEmpty(message = "name must not be null")
     @Size(min = 3, message = "merchant name must be equal or more than 3 characters")
     private String name;
 }

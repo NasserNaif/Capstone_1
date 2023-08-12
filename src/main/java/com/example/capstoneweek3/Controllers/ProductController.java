@@ -47,16 +47,16 @@ public class ProductController {
             return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
         }
 
-        boolean isUpdated = productService.updateProduct(id, newProduct);
-        if (isUpdated) {
-            boolean isCategoryIsValid = categoryService.checkCategory(newProduct.getCategoryID());
-            if (isCategoryIsValid) {
+        boolean checkCategory = categoryService.checkCategory(id);
+        if (checkCategory) {
+            boolean isUpdated = productService.updateProduct(id, newProduct);
+            if (isUpdated) {
                 return ResponseEntity.status(200).body(new ApiResponse("product added"));
             } else {
-                return ResponseEntity.status(400).body(new ApiResponse("wrong category ID "));
+                return ResponseEntity.status(400).body(new ApiResponse("wrong product ID "));
             }
         } else {
-            return ResponseEntity.status(400).body(new ApiResponse("no product with this ID : " + id));
+            return ResponseEntity.status(400).body(new ApiResponse("no Category with this ID : " + newProduct.getCategoryID()));
         }
     }
 

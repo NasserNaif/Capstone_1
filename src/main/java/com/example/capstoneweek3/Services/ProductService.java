@@ -1,5 +1,6 @@
 package com.example.capstoneweek3.Services;
 
+import com.example.capstoneweek3.Models.MerchantModel;
 import com.example.capstoneweek3.Models.ProductModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,15 @@ public class ProductService {
         for (int i = 0; i < products.size(); i++) {
             if (Objects.equals(products.get(i).getId(), id)) {
                 products.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkProduct(Integer id) {
+        for (ProductModel product : products) {
+            if (Objects.equals(product.getId(), id)) {
                 return true;
             }
         }
