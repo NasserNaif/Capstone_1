@@ -69,4 +69,12 @@ public class ProductController {
             return ResponseEntity.status(400).body(new ApiResponse("no product with this ID : " + id));
         }
     }
+
+    // EXTRA
+    @GetMapping("/filter/{money}")
+    public ArrayList<ProductModel> filterProducts(@PathVariable Integer money) {
+        return productService.filter(money);
+    }
+
+
 }

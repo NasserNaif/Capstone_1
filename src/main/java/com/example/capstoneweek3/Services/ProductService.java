@@ -77,4 +77,15 @@ public class ProductService {
 
         return 0.0;
     }
+
+    public ArrayList<ProductModel> filter(Integer money) {
+        ArrayList<ProductModel> result = new ArrayList<>();
+        for (ProductModel prod : products
+        ) {
+            if (prod.getPrice() <= money) {
+                result.add(prod);
+            }
+        }
+        return result;
+    }
 }
