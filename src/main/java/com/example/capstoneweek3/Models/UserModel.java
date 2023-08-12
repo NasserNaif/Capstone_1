@@ -17,7 +17,7 @@ public class UserModel {
 
     @NotEmpty(message = "password must not be empty")
     @Size(min = 7, message = "password must be  >= 7")
-    @Pattern(regexp = "^[a-zA-Z0-9]*$\n")
+    @Pattern(regexp = "^[a-zA-Z0-9]{7,20}", message = "password is too weak ")
     private String password;
 
     @NotEmpty(message = "email must not be empty")
@@ -25,7 +25,7 @@ public class UserModel {
     private String email;
 
     @NotEmpty(message = "role must not be empty")
-    @Pattern(regexp = "(Admin,Cutomer)")
+    @Pattern(regexp = "(Admin|Customer)", message = "user must be Admin or Customer only")
     private String role;
 
     @NotNull(message = "balance must not be null")
