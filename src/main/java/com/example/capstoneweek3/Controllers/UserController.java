@@ -55,4 +55,18 @@ public class UserController {
             return ResponseEntity.status(400).body(new ApiResponse("wrong user ID"));
         }
     }
+
+    @PutMapping("/buy/{userid}/{productid}/{merchantid}")
+    public ResponseEntity buyProduct(@PathVariable Integer userid, @PathVariable Integer productid, @PathVariable Integer merchantid) {
+        ApiResponse result = userService.buyProduct(userid, productid, merchantid);
+
+        if (result.getMessage().equals("buy successfully")) {
+            return ResponseEntity.status(200).body(result);
+        } else {
+            return ResponseEntity.status(400).body(result);
+
+        }
+    }
+
+
 }

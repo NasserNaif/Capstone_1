@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
 
-    //   private final CategoryService categoryService;
     ArrayList<ProductModel> products = new ArrayList<>();
 
     public ArrayList<ProductModel> getProducts() {
@@ -52,5 +52,29 @@ public class ProductService {
             }
         }
         return false;
+    }
+
+    public boolean checkPrice(Integer productID, Double money) {
+        for (ProductModel prod : products
+        ) {
+            if (Objects.equals(prod.getId(), productID)) {
+                if (prod.getPrice() <= money) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public Double reduceBalance(Integer ID) {
+        for (ProductModel prod : products
+        ) {
+            if (Objects.equals(prod.getId(), ID)) {
+                return prod.getPrice();
+            }
+        }
+
+        return 0.0;
     }
 }

@@ -50,5 +50,25 @@ public class MerStockService {
         return false;
     }
 
+    public boolean checkProduct_merchant(Integer productID, Integer merchantID) {
+        for (MerStockModel stock : stocks
+        ) {
+            if (Objects.equals(stock.getMerchantID(), merchantID) && Objects.equals(stock.getProductID(), productID) && stock.getStock() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void reduceStock(Integer productID, Integer merchantID) {
+        for (MerStockModel stock : stocks
+        ) {
+            if (Objects.equals(stock.getMerchantID(), merchantID) && Objects.equals(stock.getProductID(), productID)) {
+                stock.setStock(stock.getStock() - 1);
+            }
+        }
+
+    }
+
 
 }
