@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class MerchantController {
 
     private final MerchantService merchantService;
-    private final MerStockService merStockService;
 
     @GetMapping("/get")
     public ArrayList getAllMerchant() {
@@ -62,7 +61,7 @@ public class MerchantController {
     // Q 11
     @PutMapping("/add-stock/{productid}/{merchantid}/{amount}")
     public ResponseEntity addMoreStock(@PathVariable Integer productid, @PathVariable Integer merchantid, @PathVariable Integer amount) {
-        boolean isAdded = merStockService.addMoreStocks(productid, merchantid, amount);
+        boolean isAdded = merchantService.addMoreStock(productid, merchantid, amount);
 
         if (isAdded) {
             return ResponseEntity.status(201).body(new ApiResponse("amount added"));
