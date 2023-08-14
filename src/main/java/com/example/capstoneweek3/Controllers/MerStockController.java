@@ -20,8 +20,6 @@ import java.util.ArrayList;
 public class MerStockController {
 
     private final MerStockService merStockService;
-    private final MerchantService merchantService;
-    private final ProductService productService;
 
 
     @GetMapping("/get")
@@ -34,13 +32,12 @@ public class MerStockController {
         if (errors.hasErrors()) {
             return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
         }
-        if (merchantService.checkMerchant(newStock.getMerchantID()) && productService.checkProduct(newStock.getProductID())) {
-            merStockService.addStock(newStock);
-            return ResponseEntity.status(201).body(new ApiResponse("stock added"));
-        } else {
-            return ResponseEntity.status(400).body(new ApiResponse("product ID or merchant ID is wrong"));
-        }
+        ApiResponse result = merStockService.addStock(newStock);
 
+        if (result.getMessage().equals("stock added")) {
+            return ResponseEntity.status(201).body(result);
+        }
+        return ResponseEntity.status(400).body(result);
     }
 
     @PutMapping("/update/{id}")
@@ -48,19 +45,13 @@ public class MerStockController {
         if (errors.hasErrors()) {
             return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
         }
+        ApiResponse result = merStockService.updateStock(id, newStock);
 
-        if (merchantService.checkMerchant(newStock.getMerchantID()) && productService.checkProduct(newStock.getProductID())) {
-            boolean isUpdated = merStockService.updateStock(id, newStock);
 
-            if (isUpdated) {
-                return ResponseEntity.status(201).body(new ApiResponse("stock updated"));
-            } else {
-                return ResponseEntity.status(400).body(new ApiResponse("wrong stock ID"));
-            }
-        } else {
-            return ResponseEntity.status(400).body(new ApiResponse("product ID or merchant ID is wrong in new merchant stock you added"));
+        if (result.getMessage().equals("stock updated")) {
+            return ResponseEntity.status(201).body(result);
         }
-
+        return ResponseEntity.status(400).body(result);
     }
 
     @DeleteMapping("/delete/{id}")

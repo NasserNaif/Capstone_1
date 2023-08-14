@@ -1,32 +1,51 @@
 package com.example.capstoneweek3.Services;
 
+import com.example.capstoneweek3.APIresponse.ApiResponse;
 import com.example.capstoneweek3.Models.MerStockModel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 @Service
-
+@RequiredArgsConstructor
 public class MerStockService {
     ArrayList<MerStockModel> stocks = new ArrayList<>();
+
+    private final MerchantService merchantService;
+    private final ProductService productService;
 
     public ArrayList<MerStockModel> getStocks() {
         return stocks;
     }
 
-    public void addStock(MerStockModel newStock) {
-        stocks.add(newStock);
+    public ApiResponse addStock(MerStockModel newStock) {
+        if (merchantService.checkMerchant(newStock.getMerchantID())) {
+            if (productService.checkProduct(newStock.getProductID())) {
+                stocks.add(newStock);
+                return new ApiResponse("stock added");
+            }
+            return new ApiResponse("wrong product ID");
+        }
+        return new ApiResponse("wrong merchant ID");
     }
 
-    public boolean updateStock(Integer id, MerStockModel newStock) {
-        for (int i = 0; i < stocks.size(); i++) {
-            if (Objects.equals(stocks.get(i).getId(), id)) {
-                stocks.set(i, newStock);
-                return true;
+
+    public ApiResponse updateStock(Integer id, MerStockModel newStock) {
+        if (merchantService.checkMerchant(newStock.getMerchantID())) {
+            if (productService.checkProduct(newStock.getProductID())) {
+                for (int i = 0; i < stocks.size(); i++) {
+                    if (Objects.equals(stocks.get(i).getId(), id)) {
+                        stocks.set(i, newStock);
+                        return new ApiResponse("stock updated");
+                    }
+                }
+                return new ApiResponse("wrong stock ID");
             }
+            return new ApiResponse("wrong product ID");
         }
-        return false;
+        return new ApiResponse("wrong merchant ID");
     }
 
     public boolean deleteStock(Integer id) {
