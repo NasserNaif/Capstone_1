@@ -19,8 +19,7 @@ import java.util.ArrayList;
 public class ProductController {
 
     private final ProductService productService;
-    @Getter
-    private final CategoryService categoryService;
+
 
     @GetMapping("/get")
     public ArrayList<ProductModel> getAllProduct() {
@@ -32,14 +31,14 @@ public class ProductController {
         if (errors.hasErrors()) {
             return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
         }
-        boolean isCategoryIsValid = categoryService.checkCategory(newProduct.getCategoryID());
+        ApiResponse result = productService.addProduct(newProduct);
 
-        if (isCategoryIsValid) {
-            productService.addProduct(newProduct);
-            return ResponseEntity.status(200).body(new ApiResponse("product added"));
-        } else {
-            return ResponseEntity.status(400).body(new ApiResponse("wrong category ID,"));
+        if (result.getMessage().equals("product added")) {
+            return ResponseEntity.status(201).body(result);
         }
+
+        return ResponseEntity.status(400).body(result);
+
 
     }
 
@@ -49,24 +48,19 @@ public class ProductController {
             return ResponseEntity.status(400).body(errors.getFieldError().getDefaultMessage());
         }
 
-        boolean checkCategory = categoryService.checkCategory(id);
-        if (checkCategory) {
-            boolean isUpdated = productService.updateProduct(id, newProduct);
-            if (isUpdated) {
-                return ResponseEntity.status(200).body(new ApiResponse("product added"));
-            } else {
-                return ResponseEntity.status(400).body(new ApiResponse("wrong product ID "));
-            }
+        ApiResponse result = productService.updateProduct(id, newProduct);
+        if (result.getMessage().equals("product updated")) {
+            return ResponseEntity.status(201).body(result);
         } else {
-            return ResponseEntity.status(400).body(new ApiResponse("no Category with this ID : " + newProduct.getCategoryID()));
+            return ResponseEntity.status(400).body(result);
         }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteProduct(@PathVariable Integer id) {
-        boolean isUpdated = productService.deleteProduct(id);
-        if (isUpdated) {
-            return ResponseEntity.status(200).body(new ApiResponse("product added"));
+        boolean isDeleted = productService.deleteProduct(id);
+        if (isDeleted) {
+            return ResponseEntity.status(200).body(new ApiResponse("product deleted"));
         } else {
             return ResponseEntity.status(400).body(new ApiResponse("no product with this ID : " + id));
         }

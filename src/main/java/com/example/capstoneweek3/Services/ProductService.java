@@ -1,8 +1,11 @@
 package com.example.capstoneweek3.Services;
 
+import com.example.capstoneweek3.APIresponse.ApiResponse;
 import com.example.capstoneweek3.Models.MerchantModel;
 import com.example.capstoneweek3.Models.ProductModel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,24 +17,37 @@ import java.util.Optional;
 public class ProductService {
 
 
+    private final CategoryService categoryService;
     ArrayList<ProductModel> products = new ArrayList<>();
 
     public ArrayList<ProductModel> getProducts() {
         return products;
     }
 
-    public void addProduct(ProductModel newProduct) {
-        products.add(newProduct);
+    public ApiResponse addProduct(ProductModel newProduct) {
+        boolean isCategoryIsValid = categoryService.checkCategory(newProduct.getCategoryID());
+
+        if (isCategoryIsValid) {
+            products.add(newProduct);
+            return new ApiResponse("product added");
+        }
+        return new ApiResponse("wrong category ID");
     }
 
-    public boolean updateProduct(Integer id, ProductModel newProduct) {
-        for (int i = 0; i < products.size(); i++) {
-            if (Objects.equals(products.get(i).getId(), id)) {
-                products.set(i, newProduct);
-                return true;
+    public ApiResponse updateProduct(Integer id, ProductModel newProduct) {
+        boolean checkCategory = categoryService.checkCategory(id);
+
+        if (checkCategory) {
+            for (int i = 0; i < products.size(); i++) {
+                if (Objects.equals(products.get(i).getId(), id)) {
+                    products.set(i, newProduct);
+                    return new ApiResponse("product updated");
+                }
             }
+            return new ApiResponse("wrong product ID");
         }
-        return false;
+
+        return new ApiResponse("wrong category ID");
     }
 
 
